@@ -1,14 +1,15 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, ReactNode } from 'react';
 import { SafeAreaView, View, Text, TextInput, Pressable, FlatList, StyleSheet, Linking } from 'react-native';
 import Realm from 'realm';
 
 import { Task } from './Task';
 
+// TODO: App should return a function that returns a ReactNode: () => ReactNode
 export default function App() {
   const [newTaskDescription, setNewTaskDescription] = useState<string>('');
   const [tasks, setTasks] = useState<Realm.Results<Task> | []>([]);
-  const realmRef = useRef<Realm | null>(null);
-  const subscriptionRef = useRef<Realm.Results<Task> | null>(null);
+  const realmRef = useRef<Realm | null>(null);  // <-- the type of "realmRef" is some kind of object (provided by React). "realmRef.current " is what stores Realm instance
+  const subscriptionRef = useRef<Realm.Results<Task> | null>(null); // <-- the type of "subscriptionRef" is some kind of object (provided by React). "subscriptionRef.current " is what stores the Realm.Results<Task>
 
   useEffect(() => {
     openRealm();
@@ -20,7 +21,7 @@ export default function App() {
   const openRealm = () => {
     try {
       // Open a local realm file with the schemas
-      const config = {
+      const config : Realm.Configuration = {
         schema: [Task.schema],
         // deleteRealmIfMigrationNeeded: true
       };
