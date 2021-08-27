@@ -42,7 +42,7 @@ function App() {
       
       // When querying a realm to find objects (e.g. realm.objects('Tasks')) the result we get back
       // and the objects in it are "live" and will always reflect the latest state.
-      const tasks = realm.objects('Task');
+      const tasks: Realm.Results<Task> = realm.objects('Task');
       if (tasks?.length)
         setTasks(tasks);
       

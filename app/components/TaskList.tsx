@@ -5,7 +5,7 @@ import Task from '../models/Task';
 import TaskItem from './TaskItem';
 
 interface TaskListProps {
-  tasks: Realm.Results<Task>,
+  tasks: Realm.Results<Task> | [],
   onToggleTaskStatus: (task: Task) => void,
   onDeleteTask: (task: Task) => void
 }
