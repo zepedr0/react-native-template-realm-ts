@@ -1,6 +1,6 @@
 import Realm from 'realm';
 
-export class Task extends Realm.Object {
+class Task extends Realm.Object {
   _id!: Realm.BSON.ObjectId;
   description!: string;
   isComplete!: boolean;
@@ -13,6 +13,7 @@ export class Task extends Realm.Object {
     };
   }
 
+  // To use a class as a Realm object type, define the object schema on the static property "schema".
   static schema = {
     name: 'Task',
     primaryKey: '_id',
@@ -23,3 +24,5 @@ export class Task extends Realm.Object {
     }
   };
 }
+
+export default Task;
