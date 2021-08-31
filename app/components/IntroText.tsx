@@ -1,7 +1,7 @@
 import React from 'react';
-import { View, Text, Pressable, StyleSheet, Linking } from 'react-native';
-//import openURLInBrowser from 'react-native/Libraries/Core/Devtools/openURLInBrowser'; // TODO: Replace library
-
+import { View, Text, Pressable, StyleSheet } from 'react-native';
+// @ts-ignore openURLInBrowser will open the url in your machine browser. (This isn't currently typed in React Native)
+import openURLInBrowser from 'react-native/Libraries/Core/Devtools/openURLInBrowser'; 
 import colors from '../styles/colors';
 
 function IntroText() {
@@ -16,8 +16,7 @@ function IntroText() {
       <Text style={styles.paragraph}>
         Learn more about the React Native Realm SDK at:
       </Text>
-      {/* TODO: replace: <Pressable onPress={() => openURLInBrowser('https://docs.mongodb.com/realm/sdk/react-native/')}> */}
-      <Pressable onPress={() => Linking.openURL('https://docs.mongodb.com/realm/sdk/react-native/')}>
+      <Pressable onPress={() => openURLInBrowser('https://docs.mongodb.com/realm/sdk/react-native/')}>
         <Text style={[styles.paragraph, styles.link]}>
           docs.mongodb.com/realm/sdk/react-native
         </Text>

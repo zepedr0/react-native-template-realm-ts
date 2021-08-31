@@ -8,7 +8,7 @@ interface AddTaskFormProps {
 }
 
 function AddTaskForm({ onSubmit }: AddTaskFormProps) {
-  const [description, setDescription] = useState<string>('');
+  const [description, setDescription] = useState('');
 
   const handleSubmit = () => {
     onSubmit(description);

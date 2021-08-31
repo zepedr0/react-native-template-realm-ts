@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { SafeAreaView, View, StyleSheet } from 'react-native';
 import Realm from 'realm';
 
@@ -25,7 +25,7 @@ function App() {
     return closeRealm;
   }, []);
 
-  const openRealm = async (): Promise<void> => {
+  const openRealm = useCallback(async (): Promise<void> => {
     try {
       // Open a local realm file with the schema(s) that are a part of this realm.
       const config = {
@@ -42,13 +42,13 @@ function App() {
       
       // When querying a realm to find objects (e.g. realm.objects('Tasks')) the result we get back
       // and the objects in it are "live" and will always reflect the latest state.
-      const tasks: Realm.Results<Task> = realm.objects('Task');
-      if (tasks?.length)
-        setTasks(tasks);
+      const tasksResults: Realm.Results<Task> = realm.objects('Task');
+      if (tasksResults?.length)
+        setTasks(tasksResults);
       
       // Live queries and objects emit notifications when something has changed that we can listen for.
-      subscriptionRef.current = tasks;
-      tasks.addListener((/*collection, changes*/) => {
+      subscriptionRef.current = tasksResults;
+      tasksResults.addListener((/*collection, changes*/) => {
         // If wanting to handle deletions, insertions, and modifications differently you can access them through
         // the two arguments. (Always handle them in the following order: deletions, insertions, modifications)
         // If using collection listener (1st arg is the collection):
@@ -65,9 +65,9 @@ function App() {
     catch (err) {
       console.error('Error opening realm: ', err.message);
     }
-  };
+  }, [realmRef, setTasks]);
 
-  const closeRealm = (): void => {
+  const closeRealm = useCallback((): void => {
     const subscription = subscriptionRef.current;
     subscription?.removeAllListeners();
     subscriptionRef.current = null;
@@ -78,9 +78,9 @@ function App() {
     realm?.close();
     realmRef.current = null;
     setTasks([]);
-  };
+  }, [realmRef]);
 
-  const handleAddTask = (description: string): void => {
+  const handleAddTask = useCallback((description: string): void => {
     if (!description)
       return;
 
@@ -95,9 +95,9 @@ function App() {
     realm?.write(() => {
       realm?.create('Task', Task.generate(description));
     });
-  };
+  }, [realmRef]);
 
-  const handleToggleTaskStatus = (task: Task): void => {
+  const handleToggleTaskStatus = useCallback((task: Task): void => {
     const realm = realmRef.current;
     realm?.write(() => {
       // Normally when updating a record in a NoSQL or SQL database, we have to type
@@ -117,9 +117,9 @@ function App() {
     //   const task = realm?.objectForPrimaryKey('Task', Realm.BSON.ObjectId(id));  // If the ID is passed as a string
     //   task.isComplete = !task.isComplete;
     // });
-  };
+  }, [realmRef]);
 
-  const handleDeleteTask = (task: Task): void => {
+  const handleDeleteTask = useCallback((task: Task): void => {
     const realm = realmRef.current;
     realm?.write(() => {
       realm?.delete(task);
@@ -127,7 +127,7 @@ function App() {
       // Alternatively if passing the ID as the argument to handleDeleteTask:
       // realm?.delete(realm?.objectForPrimaryKey('Task', id));
     });
-  };
+  }, [realmRef]);
 
   return (
     <SafeAreaView style={styles.screen}>
