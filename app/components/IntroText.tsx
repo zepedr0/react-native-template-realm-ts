@@ -2,6 +2,7 @@ import React from 'react';
 import { View, Text, Pressable, StyleSheet } from 'react-native';
 // @ts-ignore openURLInBrowser will open the url in your machine browser. (This isn't currently typed in React Native)
 import openURLInBrowser from 'react-native/Libraries/Core/Devtools/openURLInBrowser'; 
+
 import colors from '../styles/colors';
 
 function IntroText() {
